@@ -46,3 +46,9 @@ import {createGlobalStyle} from "styled-components";
 const GlobalStyle = createGlobalStyle` `
 로 글로벌 스타일을 생성하고
 Fragment 라는 걸 사용하면 (유령 컴포넌트)) 붙어있는 것들을 한번에 랜더링한다. <></>
+
+## a 태그 대신 Link 컴포넌트를 사용하자!
+
+- a태그는 새로고침을 일으킨다. Link 컴포넌트를 사용해서 페이지를 바꾸도록 하자!
+- <Link to={`${coin.id}`}>링크</Link>
+- Link 컴포넌트를 사용해도 스타일을 적용할 떄는 a 태그에 적용하듯이 선택하면 된다.
