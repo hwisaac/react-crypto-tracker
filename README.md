@@ -95,3 +95,34 @@ console.log(useLocation())
 ### Array 인 경우 단순히 object 타입으로 설정됐을 수가 있다. eg. tags
 
 - 인터페이스를 새로 정의해서 할당해준다.
+
+## 07 Nested Router
+
+### priceInfo?.max_supply 문법의 에러처리
+
+priceInfo 가 없거나 undefined 거나 존재하지 않으면 max_supply 를 요구하지 않고, 있으면 요구함.
+priceInfo.max_supply 였으면. 항상 priceInfo 의 max_supply 를 요구하기 떄문에 에러 발생할 수 있음
+
+### nested router 를 사용하는 이유
+
+- route 를 랜더를 하는 route 를 만들 때
+- 페이지 내의 탭이 있거나 섹션으로 분리 될 때, state 대신 url 을 이용해 컨트롤할 수 있다.
+- 유저들이 스크린이나 차트에 다이렉트로 접속할 수 있게 해준다.
+- 예를들면 /btccoin 에서 가격탭을 선택했다. 주소가 /btcoin/price 로 변경되며, price 탭이 선택되어 보여진다. 하지만 페이지 전환을 일으키진 않는다.
+- url이 useState 보다 활용성이 높은 이유는 url 주소만으로 해당 페이지를 즉시 보여주기 때문이다.
+
+### nested router 사용예시
+
+```javascript
+// routes/Coin.tsx
+// 다른 컴포넌트들
+<Switch>
+  <Route path={`/${coinId}/price`}>
+    <Price />
+  </Route>
+  <Route path={`/${coinId}/chart`}> // <Route path={`/:coinId/chart`}>
+    <Chart />
+  </Route>
+</Switch>
+// 다른컴포넌트들
+```
