@@ -167,7 +167,7 @@ console.log(priceMatch);
 
 - 리액트쿼리는 로직들을 축약해서 자동화 해준다.
 - coin Screen 에서, 데이터를 위한 State와 로딩을 위한 State 를 이용해서, 데이터가 준비되면 데이터를 state에 넣고 로딩을 false로 놨다. 하지만 리액트쿼리는 이 모든 것을 알아서 처리해준다.
-- 리액트쿼리는 받아온 데이터를 캐시에 저장해두기 때문에 데이터를 매번 fetch 하는데 로딩을 일으키지 않는다.
+- 리액트쿼리는 받아온 데이터를 **캐시**에 저장해두기 때문에 데이터를 매번 fetch 하는데 로딩을 일으키지 않는다.
 
 ### 리액트쿼리 설치
 
@@ -211,11 +211,136 @@ export function fetchCoins() {
 ### useQuery 사용
 
 - `const {isLoading, data} = useQuery("allCoins", fetchCoins);`
-- `useQuery("쿼리key", fetcher함수)` 는 `fetcher`를 가져오고 `fetcher` 가 로딩중에는 `isLoading`가 `true`, `fetcher` 가 로딩이 끝나면 `false`로 변경된다.
+- `useQuery("쿼리key", fetcher함수)` 는 `fetcher`를 가져오고 `fetcher` 가 로딩중에는 `isLoading`가 `true` (data는 undefined), `fetcher` 가 로딩이 끝나면 `false`로 변경된다.
 - fetcher 가 끝나면 fetcher의 json리턴을 data 에 저장한다.
+- key 값은 유일해야 한다. key 값으로 캐시에 저장하고 불러와야 하기 때문
 
 ```javascript
 // Coins.tsx
 import { useQuery } from "react-query";
 const { isLoading, data } = useQuery("allCoins", fetchCoins);
+```
+
+## 10 React Query part Two
+
+### Devtools
+
+- 개발할 때 데이터를 확인할 수 있는 컴포넌트.
+- 랜더할수 있는 component
+- 리액트쿼리에 있는 devtools를 import 해오면 캐시에 있는 query 를 볼 수 있다.
+
+### Devtools 사용
+
+```javascript
+import { ReactQueryDevtools } from "react-query/devtools";
+function App() {
+  return (
+    <>
+      <GlobalStyle />
+      <Router />;
+      <ReactQueryDevtools initialIsOpen={true} />
+    </>
+  );
+}
+```
+
+### useQuery() 에서 중복문제 해결
+
+- 키값 중복 문제
+
+```javascript
+const {} = useQuery(coinId, () => fetchCoinInfo(coinId));
+const {} = useQuery(coinId, () => fetchCoinTicker(coinId));
+```
+
+위에서 동일한 키값으로 coinId 가 들어가고 있다. 어떻게 해결해야 할까?
+배열을 이용한다!
+
+```javascript
+// 해결
+const {} = useQuery(["info", coinId], () => fetchCoinInfo(coinId));
+const {} = useQuery(["tickers", coinId], () => fetchCoinTicker(coinId));
+```
+
+-- isLoading,data 변수 중복문제
+
+```javascript
+// isLoading과 data가 중복된다
+const { isLoading, data } = useQuery(["info", coinId], () =>
+  fetchCoinInfo(coinId)
+);
+const { isLoading, data } = useQuery(["tickers", coinId], () =>
+  fetchCoinTicker(coinId)
+);
+```
+
+- `isLoading` 을 `isLoading:infoLoading` 으로 바꿔준다.
+
+```javascript
+// 해결
+const { isLoading: infoLoading, data: infoData } = useQuery(
+  ["info", coinId],
+  () => fetchCoinInfo(coinId)
+);
+const { isLoading: tickerLoading, data: tickersData } = useQuery(
+  ["tickers", coinId],
+  () => fetchCoinTicker(coinId)
+);
+```
+
+## 13 Pricing chart part2
+
+### apexcharts.js
+
+- ApexCharts 는 자바스크립트 chart library 이다.
+- 설치 : `npm install --save react-apexcharts apexcharts`
+
+#### Apex Charts 사용
+
+- 이미 Chart 라는 컴포넌트명을 사용하고 있으므로 ApexChart 라는 컴포넌트명을 써보자
+
+1. 컴포넌트를 import 한다 (Chart, ApexCahrt)
+2. 컴포넌트를 배치한다.
+3. props 로 원하는 데이터를 전송한다.
+
+- series 인 props 에는 우리가 보내고 싶은 모든 data가 들어있다
+
+```javascript
+import ApexChart from "react-apexcharts";
+
+<ApexChart
+  type='line'
+  series={[
+    {
+      name: "Price",
+      data: data?.map((price) => price.close),
+    },
+  ]}
+  options={{
+    theme: {
+      mode: "dark",
+    },
+    chart: {
+      height: 300,
+      width: 500,
+      toolbar: {
+        show: false,
+      },
+      background: "transparent",
+    },
+    grid: { show: false },
+    stroke: {
+      curve: "smooth",
+      width: 4,
+    },
+    yaxis: {
+      show: false,
+    },
+    xaxis: {
+      axisBorder: { show: false },
+      axisTicks: { show: false },
+      labels: { show: false },
+    },
+  }}
+/>;
 ```
