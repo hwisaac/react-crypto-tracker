@@ -1,11 +1,15 @@
+# React crypto tracker
+
 ## 설치
 
-npm i react-router-dom react-query styled-components
+- react-router-dom 과 react-query 와 스타일컴포넌트 설치
+- npm i react-router-dom react-query styled-components
 
 ## 타입스크립트 에러 해결
 
-`npm install --save-dev @types/styled-components` 명령어를 실행
+`npm install --save-dev @types/styled-components`
 `npm i --save-dev @types/react-router-dom`
+명령어를 실행해서 타입스크립트한테 설명해줘야 한다.
 
 ## Router.tsx 설명
 
@@ -34,6 +38,7 @@ export default Router;
 ## Coin.tsx 에서 주소에 대한 파라미터를 가져오는 방법
 
 ```javascript
+// Coin.tsx
 import { useParams } from "react-router";
 const { coinId } = useParams<RouteParams>();
 ```
@@ -45,7 +50,7 @@ const { coinId } = useParams<RouteParams>();
 import {createGlobalStyle} from "styled-components";
 const GlobalStyle = createGlobalStyle` `
 로 글로벌 스타일을 생성하고
-Fragment 라는 걸 사용하면 (유령 컴포넌트)) 붙어있는 것들을 한번에 랜더링한다. <></>
+Fragment 라는 걸 사용하면 (유령 컴포넌트) 붙어있는 것들을 한번에 랜더링한다. <></>
 
 ## a 태그 대신 Link 컴포넌트를 사용하자!
 
@@ -72,7 +77,7 @@ Fragment 라는 걸 사용하면 (유령 컴포넌트)) 붙어있는 것들을 �
 //Coin.tsx 에서 정보 받는 방법은 useLocation 을 이용한다.
 import { useLocation } from "react-router";
 
-const { state } = useLocation<RouteState>(); // state데이터를 받는법
+const { state } = useLocation<RouteState>(); // state 데이터를 받는법
 console.log(useLocation())
 // { pathname: '/bnb-binance-coin', search:'', hash:'', state:{name: 'Binance Coin}, key:'avivim' }
 ```
@@ -110,12 +115,22 @@ priceInfo.max_supply 였으면. 항상 priceInfo 의 max_supply 를 요구하기
 - 유저들이 스크린이나 차트에 다이렉트로 접속할 수 있게 해준다.
 - 예를들면 /btccoin 에서 가격탭을 선택했다. 주소가 /btcoin/price 로 변경되며, price 탭이 선택되어 보여진다. 하지만 페이지 전환을 일으키진 않는다.
 - url이 useState 보다 활용성이 높은 이유는 url 주소만으로 해당 페이지를 즉시 보여주기 때문이다.
+- useState 는 state 가 트리거가 되서 랜더링 되지만, nested router 는 주소 변경이 트리거가 되서 랜더링 된다.
 
 ### nested router 사용예시
 
 ```javascript
 // routes/Coin.tsx
-// 다른 컴포넌트들
+// 컨트롤러 Link 를 쓰면 새로고침을 안한다.
+<Tabs>
+  <Tab isActive={chartMatch !== null}>
+    <Link to={`/${coinId}/chart`}>Chart</Link>
+  </Tab>
+  <Tab isActive={priceMatch !== null}>
+    <Link to={`/${coinId}/price`}>Price</Link>
+  </Tab>
+</Tabs>
+// nested 라우트 URL 컴포넌트
 <Switch>
   <Route path={`/${coinId}/price`}>
     <Price />
@@ -126,3 +141,26 @@ priceInfo.max_supply 였으면. 항상 priceInfo 의 max_supply 를 요구하기
 </Switch>
 // 다른컴포넌트들
 ```
+
+### useRouteMatch 라는 Hook 에 대해
+
+- useRouteMatch('주소'); 는 null 이나 object를 반환한다.
+- useRouteMatch 는 특정한 URL 에 있는지 여부를 알려준다.
+- 해당 주소에 없으면 null이고, 있으면 관련된 정보를 가진 Object
+
+#### useRouteMatch 사용법
+
+```javascript
+import {useRouteMatch} from "react-router-dom";
+// "/:coinId/price" 주소에 없으면 null 을 반환하고, 해당 주소에 있으면 priceMatch 오브젝트 그걸 알려준다.
+const priceMatch = useRouteMatch("/:coinId/price");
+console.log(priceMatch);
+/* priceMatch Object
+{ isExact: true ,
+  params: {coinID: 'btc-bitcoin'},
+  path: "/:coinId/price",
+  url: "/btc-bitcoin/price", }
+/*
+```
+
+## 09 React Query part One
