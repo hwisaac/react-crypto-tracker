@@ -164,3 +164,58 @@ console.log(priceMatch);
 ```
 
 ## 09 React Query part One
+
+- 리액트쿼리는 로직들을 축약해서 자동화 해준다.
+- coin Screen 에서, 데이터를 위한 State와 로딩을 위한 State 를 이용해서, 데이터가 준비되면 데이터를 state에 넣고 로딩을 false로 놨다. 하지만 리액트쿼리는 이 모든 것을 알아서 처리해준다.
+- 리액트쿼리는 받아온 데이터를 캐시에 저장해두기 때문에 데이터를 매번 fetch 하는데 로딩을 일으키지 않는다.
+
+### 리액트쿼리 설치
+
+npm install react query
+
+### 리액트쿼리 사용
+
+1. queryClient 를 만든다.
+2. queryClientProvider 를 만든다. (provider는 그 자식요소들이 해당 provider로 접근하는 걸 의미한다.)
+3. 프로바이더로 컴포넌트들을 감싸준다.
+
+- QueryClientProvider 는 client 에 props 를 필요로 한다.
+
+```javascript
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient();
+
+<QueryClientProvider client={queryClient}>
+  <ThemeProvider theme={theme}>
+    <App />
+  </ThemeProvider>
+</QueryClientProvider>;
+```
+
+### fetcher 함수
+
+- 리액트쿼리를 쓸려면 우선 fetcher 함수를 만들어야 한다.
+- API 와 관련된 것들은 컴포넌트들과 멀리 떨어져 있도록 하자 (컴포넌트가 fetch 하지 않도록)
+- fetch 에 대한 함수는 api.ts 로 관리한다.
+- **중요: fetcher 함수는 fetch promise (json date의 Promise)를 리턴해야 한다!**
+
+```javascript
+// ./src/api.ts
+export function fetchCoins() {
+  return fetch("https://api.coinpaprika.com/v1/coins").then((response) =>
+    response.json()
+  );
+}
+```
+
+### useQuery 사용
+
+- `const {isLoading, data} = useQuery("allCoins", fetchCoins);`
+- `useQuery("쿼리key", fetcher함수)` 는 `fetcher`를 가져오고 `fetcher` 가 로딩중에는 `isLoading`가 `true`, `fetcher` 가 로딩이 끝나면 `false`로 변경된다.
+- fetcher 가 끝나면 fetcher의 json리턴을 data 에 저장한다.
+
+```javascript
+// Coins.tsx
+import { useQuery } from "react-query";
+const { isLoading, data } = useQuery("allCoins", fetchCoins);
+```
