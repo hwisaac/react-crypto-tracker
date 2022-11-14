@@ -344,3 +344,59 @@ import ApexChart from "react-apexcharts";
   }}
 />;
 ```
+
+### 에러해결
+
+> Overload 1 of 2, '(props: Props | Readonly): ReactApexChart', gave the following error.
+> Type '{ name: string; data: any[] | undefined; }' is not assignable to type 'number'.
+> Overload 2 of 2, '(props: Props, context: any): ReactApexChart', gave the following error.
+> Type '{ name: string; data: any[] | undefined; }' is not assignable to type 'number'.
+>
+> 이런 에러 뜨시는 분들은
+>
+> data: data?.map((price => price.close)) ?? [],
+>
+> 이렇게 변경해주시면 됩니다!
+
+## 15 Final Touches
+
+### useQuery 훅의 세번째 argument
+
+- useQuery("key", fetcher, Object)
+- 세번째 Object 는 넣어도 되고 안넣어도 된다.
+- Object
+
+1. reFetchIntaval : 쿼리를 refetch 하는 시간
+
+### react-helmet
+
+1. 설치 : `npm install react-helmet`
+2. ts 한테 알려주기: `npm i --save-dev @types/react-helmet`
+3. react-helmet 의 helmet 컴포넌트는 무엇을 랜더링 하든 문서의 <head> 로 보내버린다.
+4. helmet 은 head 로 가는 direct link 이므로 넣고 싶은걸 다 넣을수 있다.
+
+- favicon, css , ...
+
+```javascript
+// Coin.txt
+import { Helmet } from "react-helmet";
+
+<Helmet>
+  <title>
+    {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+  </title>
+</Helmet>;
+```
+
+## 코드챌린지
+
+- 뒤로가기 버튼 만들기
+- price 탭 완성시키기
+- chart 에서 캔들차트로 바꿔보기
+
+## STATE MANAGEMENT
+
+## Recoil
+
+- 리코일은 페북에서 만든 state management 라이브러리 (다른 걸로는 redux 가 있다.)
+-
