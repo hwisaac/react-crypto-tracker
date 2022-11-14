@@ -1,5 +1,5 @@
 # React crypto tracker
-
+- npx create-react-app react-crypto-tracker --template typescript 
 ## 설치
 
 - react-router-dom 과 react-query 와 스타일컴포넌트 설치
