@@ -76,3 +76,22 @@ const { state } = useLocation<RouteState>(); // state데이터를 받는법
 console.log(useLocation())
 // { pathname: '/bnb-binance-coin', search:'', hash:'', state:{name: 'Binance Coin}, key:'avivim' }
 ```
+
+## 06 data types
+
+### 인터페이스 정리하기
+
+1. object 를 콘솔에 일단 찍는다.
+2. 해당 오브젝트를 우클릭해서 'Store object as global variables' 로 temp 변수에 저장한다.
+3. Object.keys(temp1).join() 로 만든 문자열을 복사해서 vscode 에 붙여넣기
+4. comma(,) 를 모두 선택하고 엔터를 눌러서 줄바꿈을 해준다.
+5. 문자열을 선택한 뒤 command + shift + L 을 해서 커맨드를 받은 다음 각 줄의 끝에 세미콜론(;) 을 달아준다.
+
+6. Object.value(temp1).map(v => typeof v).join() 로 만든 문자열을 복사해서 vscode 에 붙여넣기 한다.
+7. 모든 comma(,) 를 선택해서 삭제한다.
+8. 이제 남은 문자열을 잘라내서
+9. 위에 만든 인터페이스 문자열을 선택한뒤 command + shift + L 을 해서 커서가 나오면 붙여넣기를 한다.
+
+### Array 인 경우 단순히 object 타입으로 설정됐을 수가 있다. eg. tags
+
+- 인터페이스를 새로 정의해서 할당해준다.
