@@ -313,7 +313,7 @@ import ApexChart from "react-apexcharts";
   series={[
     {
       name: "Price",
-      data: data?.map((price) => price.close),
+      data: data?.map((price) => price.close) as number[], // ts가 숫자배열로 여기게 한다.
     },
   ]}
   options={{
@@ -344,3 +344,16 @@ import ApexChart from "react-apexcharts";
   }}
 />;
 ```
+
+### 에러해결
+
+> Overload 1 of 2, '(props: Props | Readonly): ReactApexChart', gave the following error.
+> Type '{ name: string; data: any[] | undefined; }' is not assignable to type 'number'.
+> Overload 2 of 2, '(props: Props, context: any): ReactApexChart', gave the following error.
+> Type '{ name: string; data: any[] | undefined; }' is not assignable to type 'number'.
+>
+> 이런 에러 뜨시는 분들은
+>
+> data: data?.map((price => price.close)) ?? [],
+>
+> 이렇게 변경해주시면 됩니다!
