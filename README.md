@@ -52,3 +52,27 @@ Fragment 라는 걸 사용하면 (유령 컴포넌트)) 붙어있는 것들을 �
 - a태그는 새로고침을 일으킨다. Link 컴포넌트를 사용해서 페이지를 바꾸도록 하자!
 - <Link to={`${coin.id}`}>링크</Link>
 - Link 컴포넌트를 사용해도 스타일을 적용할 떄는 a 태그에 적용하듯이 선택하면 된다.
+
+## 04 route states
+
+- Link to를 통해 object(데이터) 자체도 보낼 수 있다.
+- 데이터를 받을때는 useLocation(); 을 이용한다.
+
+```javascript
+// src/routes/Coins.tsx
+// 오브젝트를 보내는 법
+<Link
+  to={{
+    pathname: `/${coin.id}`,
+    state: { name: coin.name },
+  }}></Link>
+```
+
+```javascript
+//Coin.tsx 에서 정보 받는 방법은 useLocation 을 이용한다.
+import { useLocation } from "react-router";
+
+const { state } = useLocation<RouteState>(); // state데이터를 받는법
+console.log(useLocation())
+// { pathname: '/bnb-binance-coin', search:'', hash:'', state:{name: 'Binance Coin}, key:'avivim' }
+```
