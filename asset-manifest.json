@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.js": "/react-crypto-tracker/static/js/main.e92ddcbf.chunk.js",
+    "main.js.map": "/react-crypto-tracker/static/js/main.e92ddcbf.chunk.js.map",
+    "runtime-main.js": "/react-crypto-tracker/static/js/runtime-main.c42b0544.js",
+    "runtime-main.js.map": "/react-crypto-tracker/static/js/runtime-main.c42b0544.js.map",
+    "static/js/2.046c61ba.chunk.js": "/react-crypto-tracker/static/js/2.046c61ba.chunk.js",
+    "static/js/2.046c61ba.chunk.js.map": "/react-crypto-tracker/static/js/2.046c61ba.chunk.js.map",
+    "index.html": "/react-crypto-tracker/index.html",
+    "static/js/2.046c61ba.chunk.js.LICENSE.txt": "/react-crypto-tracker/static/js/2.046c61ba.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c42b0544.js",
+    "static/js/2.046c61ba.chunk.js",
+    "static/js/main.e92ddcbf.chunk.js"
+  ]
+}
